@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "debug"
-
 require_relative "zen/version"
 
 module Zen
