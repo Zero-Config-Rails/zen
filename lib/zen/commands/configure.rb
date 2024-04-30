@@ -35,6 +35,8 @@ module Zen
           end
         end
 
+        run_pending_migrations
+
         # TODO: generators for github action CI requires repository name, we need to install them if user has enabled the option to install CI in the app. We can configure them with app_name for now and notify users to change it if required
       ensure
         # TODO: move this code to be around after configurations message in future
@@ -43,6 +45,10 @@ module Zen
 
           system! "bundle remove boring_generators"
         end
+      end
+
+      def run_pending_migrations
+        Dir.chdir(app_name) { system! "bin/rails db:migrate" }
       end
 
       private

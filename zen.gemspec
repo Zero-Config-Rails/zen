@@ -17,7 +17,16 @@ Gem::Specification.new do |spec|
 
   spec.metadata[
     "allowed_push_host"
-  ] = "TODO: Set to your gem server 'https://example.com'"
+  ] = "https://rubygems.pkg.github.com/Zero-Config-Rails"
+
+  spec.metadata["source_code_uri"] = "https://github.com/Zero-Config-Rails/zen"
+  spec.metadata[
+    "bug_tracker_uri"
+  ] = "https://github.com/Zero-Config-Rails/zen/issues"
+  spec.metadata[
+    "documentation_uri"
+  ] = "https://github.com/Zero-Config-Rails/zen/blob/main/README.md"
+  spec.metadata["source_code_uri"] = "https://github.com/Zero-Config-Rails/zen"
 
   spec.metadata["homepage_uri"] = spec.homepage
   # spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
@@ -44,6 +53,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "thor", "~> 1.3"
   spec.add_dependency "tty-prompt", "~> 0.23"
   spec.add_dependency "tty-spinner", "~> 0.9"
+  spec.add_dependency "httparty", "~> 0.22"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

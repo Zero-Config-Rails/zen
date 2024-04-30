@@ -28,7 +28,7 @@ module Zen
       # TODO: CLI is not exiting when generators are not found, find some way to raise error and exit in this case. It's rare for this to happen but we need to at least make sure app raises error for unknown situations and exit instead of continuing and have broken configurations
       def generate_rails_app
         rails_generate_command =
-          "rails new #{app_name} #{rails_generator_options} --skip"
+          "rails new #{app_name} #{rails_generator_options}"
 
         if after_rails_generate_commands.length.positive?
           commands_to_display =
