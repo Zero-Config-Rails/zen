@@ -2,8 +2,6 @@ require "json"
 require "tty-prompt"
 require "tty-spinner"
 
-require "debug"
-
 module Zen
   module Commands
     class Create
@@ -19,39 +17,40 @@ module Zen
       def execute
         generate_rails_app
         run_bin_setup
+      rescue StandardError => e
+        system! "rm -rf #{app_name}"
+
+        raise e
       end
 
       private
 
       attr_reader :app_name, :project_configurations
 
-      # TODO: CLI is not exiting when generators are not found, find some way to raise error and exit in this case. It's rare for this to happen but we need to at least make sure app raises error for unknown situations and exit instead of continuing and have broken configurations
       def generate_rails_app
         rails_generate_command =
           "rails new #{app_name} #{rails_generator_options}"
+        commands_to_display = [
+          rails_generate_command,
+          "bundle add boring_generators --group=development",
+          "bin/setup"
+        ]
 
         if after_rails_generate_commands.length.positive?
-          commands_to_display =
-            [
-              rails_generate_command,
-              *after_rails_generate_commands,
-              "bin/setup"
-            ].map
-              .with_index { |command, index| "#{index + 1}. #{command}" }
-              .join("\n")
-
-          prompt.say <<~BANNER
-          \nWe will generate a new Rails app at ./#{app_name} and execute following commands:
-    
-          #{commands_to_display}
-          BANNER
-        else
-          prompt.say <<~BANNER
-          \nWe will generate a new Rails app at ./#{app_name} with the command:
-
-            #{rails_generate_command}
-          BANNER
+          commands_to_display.insert(2, after_rails_generate_commands)
         end
+
+        commands_to_display =
+          commands_to_display
+            .map
+            .with_index { |command, index| "#{index + 1}. #{command}" }
+            .join("\n")
+
+        prompt.say <<~BANNER
+          \nWe will generate a new Rails app at ./#{app_name} and execute following commands:
+
+          #{commands_to_display}
+        BANNER
 
         continue_if? "\nContinue?"
 
@@ -64,8 +63,6 @@ module Zen
             system! "bundle exec #{command}"
           end
         end
-      rescue StandardError
-        system! "rm -rf #{app_name}"
       end
 
       def run_bin_setup
@@ -81,15 +78,18 @@ module Zen
       end
 
       def install_boring_generators_gem
-        prompt.say <<~BANNER
-          \nZen requires boring_generators gem to install and configure gems you have chosen, adding it to your project's Gemfile so generators for gems are available inside your app during configuration.
-          (We will remove it automatically once the app is fully configured!)\n
+        message = <<~BANNER
+          \nZen requires boring_generators gem to install and configure gems you have chosen, adding it to your project's Gemfile so generators for gems are available inside your app during configuration.\n
         BANNER
 
-        Dir.chdir(app_name) { system! "bundle add boring_generators" }
+        prompt.say message, color: :blue
+
+        Dir.chdir(app_name) do
+          system! "bundle add boring_generators --group=development"
+        end
       end
 
-      # TODO: It will be better to register everything below this as Thor commands so they can be used throughout the app
+      # TODO: Register everything below this as Thor commands so they can be used throughout the app
       def prompt
         return @prompt if defined?(@prompt)
 
@@ -106,7 +106,7 @@ module Zen
       def continue_if?(question)
         return if prompt.yes?(question)
 
-        prompt.error "Canceled"
+        prompt.error "Cancelled"
         exit
       end
 

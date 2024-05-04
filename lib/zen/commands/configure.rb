@@ -13,20 +13,11 @@ module Zen
           options[:project_configurations]["gems_configuration_commands"]
       end
 
+      # TODO: CLI doesn't exit when generators are not found, find some way to raise error and exit in this case. Maybe Rails doenn't raise any error at all when generators are not found?
       def execute
-        commands_to_display =
-          gems_configuration_commands
-            .each
-            .with_index { |command, index| "#{index + 1}. #{command}" }
-            .join("\n")
+        return unless Dir.exist?(app_name)
 
-        prompt.say <<~BANNER
-          \nRails app is now ready with initial configurations. Next, we will move on to configuring gems you have chosen by executing following commands:
-
-          #{commands_to_display}
-          BANNER
-
-        continue_if? "\nContinue?"
+        confirm_commands_to_execute
 
         Dir.chdir(app_name) do
           gems_configuration_commands.each do |command|
@@ -35,16 +26,29 @@ module Zen
           end
         end
 
+        # TODO: Run generators that have dynamic options here e.g. Github CI requires repository name
+
         run_pending_migrations
+      end
 
-        # TODO: generators for github action CI requires repository name, we need to install them if user has enabled the option to install CI in the app. We can configure them with app_name for now and notify users to change it if required
-      ensure
-        # TODO: move this code to be around after configurations message in future
-        Dir.chdir(app_name) do
-          prompt.say "\nRemoving boring_generators gem since it's no longer required"
+      def confirm_commands_to_execute
+        commands_to_display =
+          gems_configuration_commands
+            .map
+            .with_index do |command, index|
+              item_number = format("%02d", index + 1)
 
-          system! "bundle remove boring_generators"
-        end
+              "#{item_number}. #{command}"
+            end
+            .join("\n")
+
+        prompt.say <<~BANNER
+        \nRails app is now ready with initial configurations. Next, we will move on to configuring gems you have chosen by executing following commands:
+
+        #{commands_to_display}
+        BANNER
+
+        continue_if? "\nContinue?"
       end
 
       def run_pending_migrations
@@ -64,7 +68,7 @@ module Zen
       def continue_if?(question)
         return if prompt.yes?(question)
 
-        prompt.error "Canceled"
+        prompt.error "Cancelled"
         exit
       end
 

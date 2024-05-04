@@ -1,10 +1,15 @@
-require "httparty"
+require "rest-client"
+require "debug"
 
 module Zen
   module Api
     class ProjectTemplate
       def fetch_details(id)
-        HTTParty.get("#{api_url}/#{id}")
+        response = RestClient.get("#{api_url}/#{id}")
+
+        JSON.parse(response)
+      rescue RestClient::ExceptionWithResponse => e
+        raise e.response
       end
 
       private
