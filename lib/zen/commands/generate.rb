@@ -27,13 +27,9 @@ module Zen
 
         Zen::Commands::Create.run(all_options)
         # TODO: call class/method to save progress since rails app is now generated
-        if project_configurations[
-             "gems_configuration_commands"
-           ].length.positive?
-          Zen::Commands::Configure.run(all_options)
-        end
+        Zen::Commands::Configure.run(all_options)
         # TODO: API call to mark project as configured and store all configurations
-        instance.setup_complete_message
+        instance.setup_complete_message(app_name)
       rescue StandardError => e
         prompt = TTY::Prompt.new
 
@@ -63,12 +59,12 @@ module Zen
         Zen::Api::ProjectTemplate.new.fetch_details(id)
       end
 
-      def setup_complete_message
+      def setup_complete_message(app_name)
         prompt.say "\n🎉🎉🎉"
         prompt.ok "Congratulations! Your app is fully configured.\n"
 
         prompt.say <<~BANNER
-        1. Run the rails server with `rails s`
+        1. Run the rails server with `cd #{app_name} && rails s`
         2. You can access the app at http://localhost:3000
       BANNER
       end

@@ -13,9 +13,15 @@ module Zen
           options[:project_configurations]["gems_configuration_commands"]
       end
 
-      # TODO: CLI doesn't exit when generators are not found, find some way to raise error and exit in this case. Maybe Rails doenn't raise any error at all when generators are not found?
+      # TODO: CLI doesn't exit when generators are not found, find some way to raise error and exit in this case. Maybe Rails doesn't raise any error at all when generators are not found?
       def execute
         return unless Dir.exist?(app_name)
+
+        if project_configurations[
+             "gems_configuration_commands"
+           ].length.negative?
+          return
+        end
 
         confirm_commands_to_execute
 

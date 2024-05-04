@@ -1,5 +1,4 @@
 require "rest-client"
-require "debug"
 
 module Zen
   module Api
