@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in zen.gemspec
+# Specify your gem's dependencies in zen_pro.gemspec
 gemspec
 
 group :development do

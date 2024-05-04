@@ -1,6 +1,6 @@
 require "rest-client"
 
-module Zen
+module ZenPro
   module Api
     class ProjectTemplate
       def fetch_details(id)

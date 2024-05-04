@@ -3,7 +3,7 @@ require "thor"
 require_relative "commands/generate"
 require_relative "commands/configure"
 
-module Zen
+module ZenPro
   class CLI < Thor
     map "g" => :generate
     map %w[-v --version] => "version"
@@ -16,7 +16,7 @@ module Zen
 
     desc "version", "Display gem version", hide: true
     def version
-      say "zen/#{VERSION} #{RUBY_DESCRIPTION}"
+      say "zen_pro/#{VERSION} #{RUBY_DESCRIPTION}"
     end
   end
 end

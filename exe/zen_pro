@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require_relative "../lib/zen/cli"
+require_relative "../lib/zen_pro/cli"
 
-Zen::CLI.start(ARGV)
+ZenPro::CLI.start(ARGV)

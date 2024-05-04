@@ -2,7 +2,7 @@ require "json"
 require "tty-prompt"
 require "tty-spinner"
 
-module Zen
+module ZenPro
   module Commands
     class Create
       def self.run(options)

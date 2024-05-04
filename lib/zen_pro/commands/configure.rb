@@ -1,6 +1,6 @@
 require "tty-prompt"
 
-module Zen
+module ZenPro
   module Commands
     class Configure
       def self.run(options)
@@ -17,9 +17,7 @@ module Zen
       def execute
         return unless Dir.exist?(app_name)
 
-        if project_configurations[
-             "gems_configuration_commands"
-           ].length.negative?
+        if gems_configuration_commands.length.zero?
           return
         end
 

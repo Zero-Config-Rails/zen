@@ -2,9 +2,9 @@
 
 require "test_helper"
 
-class TestZen < Minitest::Test
+class TestZenPro < Minitest::Test
   def test_that_it_has_a_version_number
-    refute_nil ::Zen::VERSION
+    refute_nil ::ZenPro::VERSION
   end
 
   def test_it_does_something_useful

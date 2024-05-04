@@ -6,7 +6,7 @@ require_relative "create"
 require_relative "configure"
 require_relative "../api/project_template"
 
-module Zen
+module ZenPro
   module Commands
     class Generate
       extend Forwardable
@@ -25,9 +25,9 @@ module Zen
           **options
         }
 
-        Zen::Commands::Create.run(all_options)
+        ZenPro::Commands::Create.run(all_options)
         # TODO: call class/method to save progress since rails app is now generated
-        Zen::Commands::Configure.run(all_options)
+        ZenPro::Commands::Configure.run(all_options)
         # TODO: API call to mark project as configured and store all configurations
         instance.setup_complete_message(app_name)
       rescue StandardError => e
@@ -56,7 +56,7 @@ module Zen
       def fetch_project_template_configurations(id)
         prompt.say "\nFetching your project's configurations from the server ..."
 
-        Zen::Api::ProjectTemplate.new.fetch_details(id)
+        ZenPro::Api::ProjectTemplate.new.fetch_details(id)
       end
 
       def setup_complete_message(app_name)

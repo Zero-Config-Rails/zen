@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "zen/version"
+require_relative "zen_pro/version"
 
-module Zen
+module ZenPro
   class Error < StandardError
   end
   # Your code goes here...
