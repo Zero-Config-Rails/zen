@@ -15,10 +15,6 @@ Gem::Specification.new do |spec|
   spec.license = nil
   spec.required_ruby_version = ">= 3.0.0"
 
-  spec.metadata[
-    "allowed_push_host"
-  ] = "https://rubygems.pkg.github.com/Zero-Config-Rails"
-
   spec.metadata["source_code_uri"] = "https://github.com/Zero-Config-Rails/zen"
   spec.metadata[
     "bug_tracker_uri"
