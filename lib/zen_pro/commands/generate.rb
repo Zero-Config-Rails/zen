@@ -1,7 +1,3 @@
-require "forwardable"
-
-require "thor"
-
 require_relative "create"
 require_relative "configure"
 require_relative "../api/project_template"
@@ -9,8 +5,6 @@ require_relative "../api/project_template"
 module ZenPro
   module Commands
     class Generate
-      extend Forwardable
-
       def self.run(project_template_id, options)
         instance = new
 
@@ -35,15 +29,13 @@ module ZenPro
 
         prompt.error "\nOops, Zen encountered an error!"
 
-        prompt.say "\n#{e.message}"
+        prompt.error "\n#{e.message}"
       end
 
       def welcome_message
         prompt.say <<~BANNER
-            Welcome to Zero Config Rails!
-
-            We will ask you a few questions while all other options will automatically be added as per application configurations in the Web App.
-          BANNER
+          We will ask you few questions while all other options will automatically be added as per application configurations in the Web App.
+        BANNER
       end
 
       def ask_app_name
@@ -54,7 +46,7 @@ module ZenPro
       end
 
       def fetch_project_template_configurations(id)
-        prompt.say "\nFetching your project's configurations from the server ..."
+        prompt.say "\nFetching your project's configurations from the server...\n\n"
 
         ZenPro::Api::ProjectTemplate.new.fetch_details(id)
       end
@@ -64,9 +56,9 @@ module ZenPro
         prompt.ok "Congratulations! Your app is fully configured.\n"
 
         prompt.say <<~BANNER
-        1. Run the rails server with `cd #{app_name} && rails s`
-        2. You can access the app at http://localhost:3000
-      BANNER
+          1. Run the rails server with `cd #{app_name} && rails s`
+          2. You can access the app at http://localhost:3000
+        BANNER
       end
 
       private

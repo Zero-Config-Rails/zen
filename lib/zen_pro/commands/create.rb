@@ -85,7 +85,7 @@ module ZenPro
         prompt.say message, color: :blue
 
         Dir.chdir(app_name) do
-          system! "bundle add boring_generators --group=development"
+          system! "bundle add boring_generators --github=\"abhaynikam/boring_generators\" --branch=main"
         end
       end
 

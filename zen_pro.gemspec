@@ -45,10 +45,11 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "rest-client", "~> 2.1"
   spec.add_dependency "thor", "~> 1.3"
+  spec.add_dependency "tty-box", "~> 0.7.0"
   spec.add_dependency "tty-prompt", "~> 0.23"
   spec.add_dependency "tty-spinner", "~> 0.9"
-  spec.add_dependency "rest-client", "~> 2.1"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
