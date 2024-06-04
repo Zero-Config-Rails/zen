@@ -17,9 +17,7 @@ module ZenPro
       def execute
         return unless Dir.exist?(app_name)
 
-        if gems_configuration_commands.length.zero?
-          return
-        end
+        return if gems_configuration_commands.empty?
 
         confirm_commands_to_execute
 
@@ -47,7 +45,7 @@ module ZenPro
             .join("\n")
 
         prompt.say <<~BANNER
-        \nRails app is now ready with initial configurations. Next, we will move on to configuring gems you have chosen by executing following commands:
+          \nRails app is now ready with initial configurations. Next, we will move on to configuring gems you have chosen by executing following commands:
 
         #{commands_to_display}
         BANNER
