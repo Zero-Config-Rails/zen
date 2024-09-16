@@ -32,7 +32,7 @@ module ZenPro
           "rails new #{app_name} #{rails_generator_options}"
         commands_to_display = [
           rails_generate_command,
-          "bundle add boring_generators --group=development",
+          boring_generator_installation_command,
           "bin/setup"
         ]
 
@@ -77,6 +77,10 @@ module ZenPro
         project_configurations["after_rails_generate_commands"]
       end
 
+      def boring_generator_installation_command
+        "bundle add boring_generators --github='Zero-Config-Rails/boring_generators' --branch='zcr-main' --group=development"
+      end
+
       def install_boring_generators_gem
         message = <<~BANNER
           \nZen requires boring_generators gem to install and configure gems you have chosen, adding it to your project's Gemfile so generators for gems are available inside your app during configuration.\n
@@ -85,7 +89,7 @@ module ZenPro
         prompt.say message, color: :blue
 
         Dir.chdir(app_name) do
-          system! "bundle add boring_generators --github='Zero-Config-Rails/boring_generators' --branch='zcr-main'  --group=development"
+          system! boring_generator_installation_command
         end
       end
 
