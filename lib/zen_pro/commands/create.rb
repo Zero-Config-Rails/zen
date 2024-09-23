@@ -31,17 +31,19 @@ module ZenPro
         rails_generate_command =
           "rails new #{app_name} #{rails_generator_options}"
         commands_to_display = [
+          "gem update rails",
           rails_generate_command,
-          "bundle add boring_generators --group=development",
+          boring_generator_installation_command,
           "bin/setup"
         ]
 
         if after_rails_generate_commands.length.positive?
-          commands_to_display.insert(2, after_rails_generate_commands)
+          commands_to_display.insert(3, after_rails_generate_commands)
         end
 
         commands_to_display =
           commands_to_display
+            .flatten
             .map
             .with_index { |command, index| "#{index + 1}. #{command}" }
             .join("\n")
@@ -54,6 +56,8 @@ module ZenPro
 
         continue_if? "\nContinue?"
 
+        prompt.say "Verifying Rails version and updating it with latest stable one (if any)"
+        system! "gem update rails"
         system! rails_generate_command
 
         install_boring_generators_gem
@@ -77,6 +81,10 @@ module ZenPro
         project_configurations["after_rails_generate_commands"]
       end
 
+      def boring_generator_installation_command
+        "bundle add boring_generators --github='Zero-Config-Rails/boring_generators' --branch='zcr-main' --group=development"
+      end
+
       def install_boring_generators_gem
         message = <<~BANNER
           \nZen requires boring_generators gem to install and configure gems you have chosen, adding it to your project's Gemfile so generators for gems are available inside your app during configuration.\n
@@ -84,9 +92,7 @@ module ZenPro
 
         prompt.say message, color: :blue
 
-        Dir.chdir(app_name) do
-          system! "bundle add boring_generators --github='Zero-Config-Rails/boring_generators' --branch='zcr-main'  --group=development"
-        end
+        Dir.chdir(app_name) { system! boring_generator_installation_command }
       end
 
       # TODO: Register everything below this as Thor commands so they can be used throughout the app
