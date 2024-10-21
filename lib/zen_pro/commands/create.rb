@@ -70,7 +70,7 @@ module ZenPro
       end
 
       def run_bin_setup
-        Dir.chdir(app_name) { system! "bin/setup" }
+        Dir.chdir(app_name) { system! "bin/setup --skip-server" }
       end
 
       def rails_generator_options

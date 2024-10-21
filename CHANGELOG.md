@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.2.4] - 2024-10-21
+
+- Add "--skip-server" to bin/setup command so command to run rails server is skipped
+
 ## [0.2.3] - 2024-09-23
 
 - Update global rails gem version to ensure `rails new` always installs latest stable Rails version
